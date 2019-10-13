@@ -80,6 +80,7 @@ assert(sym.regs.as_unsigned(X86.EAX) == eax1)
 ```
 
 # Contact
+**Info** - info@maat.re
 **Boyan MILANOV** - boyan (dot) milanov (at) hotmail (dot) fr
 
 # Licence
