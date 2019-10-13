@@ -63,6 +63,8 @@ static PyObject* IRContext_as_unsigned(PyObject* self, PyObject* args) {
             res = as_irctx_object(self).ctx->concretize(reg, nullptr);
     }catch(ir_exception& e){
         return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
+    }catch(var_context_exception& e){
+        return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
     }
     res = cst_sign_trunc( as_irctx_object(self).ctx->get(reg)->size, res);
     return PyLong_FromUnsignedLongLong(res);
@@ -83,6 +85,8 @@ static PyObject* IRContext_as_signed(PyObject* self, PyObject* args) {
         else
             res = as_irctx_object(self).ctx->concretize(reg, nullptr);
     }catch(ir_exception& e){
+        return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
+    }catch(var_context_exception& e){
         return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
     }
     return PyLong_FromLongLong(res);

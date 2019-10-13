@@ -539,8 +539,14 @@ StopInfo SymbolicEngine::execute(unsigned int max_instr){
                  * code and create a new IRBlock */
                 is_symbolic = false;
                 is_tainted = false;
-                block = arch->disasm->disasm_block(irstate.instr_addr, mem->mem_at(irstate.instr_addr), 0xfffffff, this, &is_symbolic, &is_tainted);
-                
+                try{
+                    block = arch->disasm->disasm_block(irstate.instr_addr, mem->mem_at(irstate.instr_addr), 0xfffffff, this, &is_symbolic, &is_tainted);
+                }catch(unsupported_instruction_exception& e){
+                    _error_msg = e.what();
+                    info.stop = StopInfo::ERROR;
+                    _print_error(e.what());
+                    return StopInfo::ERROR;
+                }
                 /* Check if the block contains symbolic code */
                 if( is_symbolic ){
                     // Print error

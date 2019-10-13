@@ -129,6 +129,10 @@ bool ExprObject::inf(Expr e2){
 // ==================================
 ExprCst::ExprCst(exprsize_t s, cst_t c, Taint t): ExprObject(ExprType::CST, s, true, t){
     _cst = cst_sign_extend(s, c);
+    if( s > 64 ){
+        throw expression_exception(ExceptionFormatter() << "Cannot create constant expression of size > 64 (got "
+            << std::dec << s << ")" >> ExceptionFormatter::to_str);
+    }
 }
 hash_t ExprCst::hash(){
     unsigned char hash_in[MAXLEN_HASH_IN]; 
@@ -149,6 +153,10 @@ bool ExprCst::is_symbolic(VarContext& ctx){
 }
 // ==================================
 ExprVar::ExprVar(exprsize_t s, string n, Taint t): ExprObject(ExprType::VAR, s, true, t), _name(n){
+    if( s > 64 ){
+        throw expression_exception(ExceptionFormatter() << "Cannot create symbolic variables of size > 64 (got "
+            << std::dec << s << ")" >> ExceptionFormatter::to_str);
+    }
     assert( n.size() <= MAXLEN_HASH_IN );
 }
 hash_t ExprVar::hash(){

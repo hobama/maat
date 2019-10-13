@@ -27,15 +27,23 @@ static PyObject* MemEngine_repr(PyObject* self) {
     return MemEngine_str(self);
 }
 
-static PyObject* MemEngine_new_segment(PyObject* self, PyObject* args) {
+static PyObject* MemEngine_new_segment(PyObject* self, PyObject* args, PyObject* keywords) {
     unsigned long long start, end;
     unsigned short flags = MEM_FLAG_RWX;
+    char* name = NULL;
+    string name_str;
     
-    if( !PyArg_ParseTuple(args, "KK|H", &start, &end, &flags)){
+    char* keywds[] = {"", "", "flags", "name", NULL};
+    
+    if( !PyArg_ParseTupleAndKeywords(args, keywords, "KK|Hs", keywds, &start, &end, &flags, &name)){
         return NULL;
     }
+    if( name != NULL){
+        name_str = string(name);
+    }
+    
     try{
-        as_mem_object(self).mem->new_segment(start, end, flags);
+        as_mem_object(self).mem->new_segment(start, end, flags, name_str);
     }catch(mem_exception e){
         return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
     }
@@ -149,7 +157,7 @@ PyObject* MemEngine_make_tainted(PyObject* self, PyObject* args, PyObject* keywo
 }
 
 static PyMethodDef MemEngine_methods[] = {
-    {"new_segment", (PyCFunction)MemEngine_new_segment, METH_VARARGS, "Map a new segment in memory"},
+    {"new_segment", (PyCFunction)MemEngine_new_segment, METH_VARARGS | METH_KEYWORDS, "Allocate a new segment in memory"},
     {"read", (PyCFunction)MemEngine_read, METH_VARARGS, "Reads memory into an expression"},
     {"write", (PyCFunction)MemEngine_write, METH_VARARGS, "Write a value/expression/buffer into memory"},
     {"make_symbolic", (PyCFunction)MemEngine_make_symbolic, METH_VARARGS, "Make a memory area purely symbolic"},

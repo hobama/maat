@@ -5257,7 +5257,7 @@ IRBlock* DisassemblerX86::disasm_block(addr_t addr, code_t code, size_t code_siz
             case X86_INS_XCHG:      x86_xchg_d(_mode, _insn, curr_addr, block, bblkid, tmp_var_count); break;
             case X86_INS_XOR:       x86_xor_d(_mode, _insn, curr_addr, block, bblkid, tmp_var_count); break;
             default: throw unsupported_instruction_exception(ExceptionFormatter() << 
-                "DisassemblerX86:disasm_block(): unsupported instruction " << _insn->mnemonic << " at addr " << std::hex << addr -_insn->size
+                "DisassemblerX86:disasm_block(): unsupported instruction " << _insn->mnemonic << " at addr 0x" << std::hex << addr -_insn->size
                 >> ExceptionFormatter::to_str );
         }
         
@@ -5702,8 +5702,6 @@ IRBlock* DisassemblerX86::disasm_block(addr_t addr, code_t code, size_t code_siz
     INSD                Input from Port to String
     INSERTPS                Insert Scalar Single-Precision Floating-Point Value
     INSW                Input from Port to String
-    INT n                Call to Interrupt Procedure
-    INT3                Call to Interrupt Procedure
     INT1                Call to Interrupt Procedure
     INTO                Call to Interrupt Procedure
     INVD                Invalidate Internal Caches

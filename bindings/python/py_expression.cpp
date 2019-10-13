@@ -267,7 +267,11 @@ PyObject* maat_Cst(PyObject* self, PyObject* args, PyObject* keywords){
     if( object != nullptr ){
         object->size = size;
         object->expr = new Expr();
-        *object->expr = exprcst(size,val, taint);
+        try{
+            *object->expr = exprcst(size,val, taint);
+        }catch(expression_exception& e){
+            return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
+        }
     }
     return (PyObject*)object;
 }
@@ -300,7 +304,11 @@ PyObject* maat_Var(PyObject* self, PyObject* args, PyObject* keywords){
     if( object != nullptr ){
         object->size = size;
         object->expr = new Expr();
-        *object->expr = exprvar(size, name, taint);
+        try{
+            *object->expr = exprvar(size, name, taint);
+        }catch(expression_exception& e){
+            return PyErr_Format(PyExc_RuntimeError, "%s", e.what());
+        }
     }
     return (PyObject*)object;
 }
