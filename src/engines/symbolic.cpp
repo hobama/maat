@@ -608,6 +608,7 @@ StopInfo SymbolicEngine::execute(unsigned int max_instr){
                     breakpoint_record.clear_asmlvl();
                     /* Change instruction address and ir count */
                     irstate.instr_addr = instr->addr;
+                    info.addr = instr->addr;
                     ir_instr_start = irstate.ir_instr_num;
                     max_instr--;
                     /* Check if automodifying code has been detected */
@@ -739,7 +740,14 @@ StopInfo SymbolicEngine::execute(unsigned int max_instr){
                     }else{
                         write_addr = cst_sign_trunc(dst->size, dst->concretize(vars));
                         /* THEN execute the store */
-                        mem->write(write_addr, src1, vars, mem_alert);
+                        try{
+                            mem->write(write_addr, src1, vars, mem_alert);
+                        }catch(mem_exception& e){
+                            _error_msg = e.what();
+                            info.stop = StopInfo::ERROR;
+                            info.addr = instr->addr;
+                            return StopInfo::ERROR;
+                        }
                         /* Check if we overwrote executable code */
                         if( mem_alert & MEM_ALERT_X_OVERWRITE ){
                             /* Check if it is inside a block already disassembled */
@@ -760,7 +768,15 @@ StopInfo SymbolicEngine::execute(unsigned int max_instr){
                     if( src1->is_symbolic(*vars) ){
                         throw runtime_exception("SymbolicEngine::execute_block(): full symbolic pointer read not yet supported");
                     }else{
-                        rvalue = mem->read(cst_sign_trunc(src1->size, src1->concretize(vars)), (instr->dst.high-instr->dst.low+1)/8);
+                        try{
+                            rvalue = mem->read(cst_sign_trunc(src1->size, src1->concretize(vars)), (instr->dst.high-instr->dst.low+1)/8);
+                        }catch(mem_exception& e){
+                            _error_msg = e.what();
+                            info.stop = StopInfo::ERROR;
+                            info.addr = instr->addr;
+                            _print_error(e.what());
+                            return StopInfo::ERROR;
+                        }
                     }
                     
                     /* Affect lvalue */

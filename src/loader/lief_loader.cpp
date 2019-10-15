@@ -275,7 +275,7 @@ void LIEFLoader::_import_env_functions(SymbolicEngine& sym){
 
 void LIEFLoader::_load_ctype_b_loc_table(SymbolicEngine& sym){
     size_t table_size = (256 + 127 + 1) * 2; // 384 entries of 2 bytes each
-    addr_t table_segment = _create_segment(sym, 0x0, 0x400, 0x400, MEM_FLAG_RW, "ctype_loc_b table");
+    addr_t table_segment = _create_segment(sym, 0x4000, 0x400, 0x400, MEM_FLAG_RW, "ctype_loc_b table");
     addr_t table_addr = table_segment + 0x10;
     // Write a pointer to the table
     sym.mem->write(table_segment, table_addr + (128*2), (unsigned int)4); // Because first 128 entries are negative offsets
@@ -344,8 +344,8 @@ void LIEFLoader::load(string name, BinType type, uint64_t base, vector<CmdlineAr
     sym.regs->set(X86_EBP, exprcst(32, stack_base + stack_size));
     
     /* Setup kernel stack */
-    kernel_stack_size = 0x00010000;
-    kernel_stack_base = _create_segment(sym, 0x0, kernel_stack_size, 0x00010000, MEM_FLAG_RW, "Kernel Stack");
+    kernel_stack_size = 0x000c000;
+    kernel_stack_base = _create_segment(sym, 0x4000, kernel_stack_size, 0x0010000, MEM_FLAG_RW, "Kernel Stack");
     sym.env->kernel_stack = kernel_stack_base + kernel_stack_size;
     
     /* Setup heap */
