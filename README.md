@@ -25,6 +25,7 @@ Key features:
 - [Installation](https://maat.re/install.html)
 - [Tutorials](https://maat.re/tutorials.html)
      - [First steps](https://maat.re/tutorial_first_steps.html)
+     - [Load & run binaries](https://maat.re/tutorial_load_and_run.html)
 - [Documentation](https://maat.re)
      - [Python API](https://maat.re/python_api.html)
 - [Examples](#Examples)
