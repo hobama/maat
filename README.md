@@ -13,13 +13,13 @@
 
 # About
 
-Maat is an open-source Dynamic Symbolic Execution framework used for Binary Analysis. It provides several functionnalities such as symbolic execution, taint analysis, constraint solving, binary loading, and X86 assembly lifting: https://maat.re
+Maat is an open-source Dynamic Symbolic Execution framework used for Binary Analysis. It provides several functionalities such as symbolic execution, taint analysis, constraint solving, binary loading, and X86 assembly lifting: https://maat.re
 
 Key features:
 
-- **Portable**: Maat has very few dependencies to other projects
+- **Portable**: Maat has very few dependencies ([z3](https://github.com/Z3Prover/z3), [capstone](https://github.com/aquynh/capstone) and [LIEF](https://github.com/lief-project/LIEF)) compared to other projects
 - **Fast**: Maat was designed to scale to real-world usage
-- **Python Bindings**: Use Maat effortlessly in python scripts
+- **Python Bindings**: Use Maat effortlessly in Python scripts
      
 # Getting started
 - [Installation](https://maat.re/install.html)
